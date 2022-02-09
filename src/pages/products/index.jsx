@@ -28,7 +28,7 @@ function Products() {
   const { productsShop, setProductsShop } = useShop();
 
   const [product, setProduct] = useState({});
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(0);
   const [total, setTotal] = useState(0);
 
   useEffect(async () => {
@@ -45,6 +45,7 @@ function Products() {
 
   useEffect(() => {
     setTotal(product.value * amount);
+    setProduct({ ...product, quantidade: amount });
   }, [amount]);
 
   function addShop() {

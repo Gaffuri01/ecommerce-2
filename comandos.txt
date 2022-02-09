@@ -1,2 +1,4 @@
 yarn
-json-server --watch -p 3333 db.json
+yarn start
+json-server --watch -p 8000 db.json //mudei a porta por ter conflito com o projeto de node
+npm install -g json-server

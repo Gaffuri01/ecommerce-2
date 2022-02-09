@@ -22,7 +22,7 @@ function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(async () => {
-    const { data } = await api.get("/products");
+    const { data } = await api.get("/products/");
 
     const formatData = data.map((prod) => {
       return { ...prod, value: FormatCurrency(prod.value) };

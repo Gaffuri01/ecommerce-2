@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Menu from "../../components/Menu";
 
 import Container from "@material-ui/core/Container";
@@ -17,20 +17,34 @@ import AddIcon from "@material-ui/icons/Add";
 import { FormatCurrency } from "../../utils/formatCurrency";
 import { useStyles } from "../products/styles";
 import { useShop } from "../../context/shop";
-import Products from "../products/index";
 
 function Shop() {
   const classes = useStyles();
-  const { productsShop } = useShop();
-  const [amount, setAmount] = useState(1);
+  const { productsShop, setProductsShop } = useShop();
 
   console.log(productsShop);
 
-  const listaProdutos = productsShop;
-
   function removeItem(id) {
-    listaProdutos.splice(id);
+    const auxList = productsShop.filter((item) => item.id !== id);
+
+    setProductsShop(auxList);
   }
+
+  const addItem = (id) => {
+    const product = productsShop.find((item) => item.id === id);
+    product.quantidade = product.quantidade + 1;
+    setProductsShop((preProductsShop) => {
+      return [...new Set([...preProductsShop, product])];
+    });
+  };
+
+  const retItem = (id) => {
+    const product = productsShop.find((item) => item.id === id);
+    product.quantidade = product.quantidade - 1;
+    setProductsShop((preProductsShop) => {
+      return [...new Set([...preProductsShop, product])];
+    });
+  };
 
   return (
     <>
@@ -80,28 +94,24 @@ function Shop() {
                       >
                         <IconButton
                           onClick={() => {
-                            if (amount > 1) {
-                              setAmount(amount - 1);
+                            if (product.quantidade > 1) {
+                              retItem(product.id);
                             }
                           }}
                         >
                           <RemoveIcon />
                         </IconButton>
 
-                        <Typography>{amount}</Typography>
+                        <Typography>{product.quantidade}</Typography>
 
-                        <IconButton
-                          onClick={() => {
-                            setAmount(amount + 1);
-                          }}
-                        >
+                        <IconButton onClick={() => addItem(product.id)}>
                           <AddIcon />
                         </IconButton>
                       </div>
                     }
                   </TableCell>
                   <TableCell align="center">
-                    {FormatCurrency(product.value * amount)}
+                    {FormatCurrency(product.value * product.quantidade)}
                   </TableCell>
                   <TableCell align="center">
                     {
